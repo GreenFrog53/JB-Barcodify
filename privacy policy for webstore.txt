@@ -1,0 +1,29 @@
+Privacy Policy
+
+Last updated: 27/06/2024
+
+Thank you for using JB Barcodify. Your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Chrome extension. Please read this policy carefully to understand our views and practices regarding your personal data and how we will treat it.
+
+1. Information We Collect
+
+We do not collect any personal information directly. The Extension operates by sending the data you provide to a third-party server to retrieve images.
+
+2. Use of Information
+
+The Extension uses the data you provide solely for the purpose of fetching relevant images from the internet. The data is transmitted to a third-party service to retrieve these images. We do not store or retain any of the data you provide.
+
+3. Disclosure of Information
+
+Since we do not collect personal information, we do not disclose any personal information to third parties. The data you provide is only used in real-time to query the third-party server for images.
+
+4. Third-Party Services
+
+The Extension interacts with third-party servers to retrieve images. These third parties may have their own privacy policies addressing how they use such information. We encourage you to review the privacy policies of these third-party services.
+
+5. Data Security
+
+We do not store or process any data on our servers, and we take reasonable measures to ensure that the data transmitted through the Extension is handled securely. However, please be aware that no data transmission over the internet or wireless network can be guaranteed to be 100% secure.
+
+6. Changes to This Privacy Policy
+
+We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy when appropriate.
