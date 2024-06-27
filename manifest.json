@@ -1,17 +1,15 @@
 {
   "manifest_version": 3,
   "name": "JB Barcodify",
-  "description": "When viewing the Australian JB Hi-Fi website, replace the useless invisible PLU code with a scannable barcode for PDA's. A reload is needed when using the carousel picker.",
+  "description": "JB Website Barcode Generator",
   "version": "1.0",
   "action": {
     "default_popup": "hello.html",
     "default_icon": {              
       "16": "images/icon16.png",   
-      "24": "images/icon24.png",   
       "32": "images/icon32.png",
       "64": "images/icon64.png",
       "128": "images/icon128.png",
-      "1000": "images/icon1000.png"    
     }
   },
   "content_scripts": [
