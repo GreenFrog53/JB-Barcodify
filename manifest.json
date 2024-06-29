@@ -12,6 +12,12 @@
       "128": "images/icon128.png"
     }
   },
+  "permissions": [
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },  
   "content_scripts": [
     {
       "matches": ["https://www.jbhifi.com.au/products/*"],
