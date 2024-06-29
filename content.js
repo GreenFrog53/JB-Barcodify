@@ -2,7 +2,6 @@
 const pluElement = document.querySelector('.zm2jk14#pdp-title-plu');
 
 
-
 if (pluElement) {
   
   // Detects when the page URL has changed (due to carousel involvement and updates the PLU Barcode). Listens to message from background.js
@@ -30,19 +29,24 @@ function refreshBarcode() {
   
   // Extract the current PLU number (assuming it's after the colon)
   const currentPlu = pluElement.textContent.split(':')[1].trim();
+
   // Print the PLU to the console
   console.log("PLU:", currentPlu);
   
-  const baseUrl = 'http://bwipjs-api.metafloor.com/?bcid=code128&text='
+  // Create the element for the barcode to sit
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.id = "barcode";
+  pluElement.insertBefore(svg, pluElement.firstChild);
 
-  // Create a new image element
-  const image = new Image();
-  image.src = baseUrl + currentPlu;
-
-  // Replace the element content with the image
-  pluElement.insertBefore(image, pluElement.firstChild);
+  // Call JsBarcode and generate the barcode
+  JsBarcode("#barcode", currentPlu, {
+    displayValue: false,
+    margin: 0,
+    height: 27
+  });
   
   console.log("The barcode has been refreshed.");
+
   return null;
 }
 
