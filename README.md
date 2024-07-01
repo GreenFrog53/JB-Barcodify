@@ -1,9 +1,12 @@
 # JB Barcodify
-Just a simple little chrome extension I made for people who work at JB Hi-Fi in Australia. When installed in Chrome and on the JB Hi-Fi website, the useless invisible PLU will be converted into a barcode that is scannable on PDA's, saving time by not having to type in the SKU into Onstage.
-## Limitations
-- ~~Currently the product carousel on the website does not update the Barcode when another product is selected. A page reload fixes this but is annoying~~ Now Supports Flickity!!
-- ~~Uses a third party barcode service to generate the image and send back to the computer, slower than local generation. A local library will be added in the future after gauging interest~~ Now done with JsBarcode!!
-- ~~Could be prettier and properly integrated with CSS, but works for now~~ Now with added padding!!
+Just a simple little chrome extension I made for people who work at JB Hi-Fi in Australia. When installed in Chrome and on the JB Hi-Fi website, the useless invisible PLU will be converted into a barcode that is scannable on PDA's, saving time by not having to type in the SKU into Onstage. Also adds a button to the website to easily lookup in the internal Product App!
+
+## Features
+- Converts the useless PLU on the website to a barcode using JsBarcode
+- Adds a button on the page to easily look the item up in the internal Product App
+- Integrates into the webpage in a nice way
+- Carousel support with different configurations and colours, auto updates the barcode and the Product App link
+- Removes annoyances to speed up loading (such as the ZIP and Afterpay Buttons, ask for a JB deal header)
 
 ## Special Thanks
 A massive thanks goes to Johan Lindell for the [barcode generation tool (JsBarcode)](https://github.com/lindell/JsBarcode) used
