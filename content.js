@@ -17,7 +17,7 @@ if (pluElement) {
 
 
   // To be run when the webpage is first loaded
-  removeAnnoyances();
+  // removeAnnoyances();
   const barcodeSvg = createBarcode();
   const buttonElement = createProductAppButton();
 
