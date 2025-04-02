@@ -6,7 +6,8 @@ Just a simple little chrome extension I made for people who work at JB Hi-Fi in 
 - Adds a button on the page to easily look the item up in the internal Product App
 - Integrates into the webpage in a nice way
 - Carousel support with different configurations and colours, auto updates the barcode and the Product App link
-- Removes annoyances to speed up loading (such as the ZIP and Afterpay Buttons, ask for a JB deal header)
+- Converts the PLU on the product app to a barcode for easier internal inventory querys
+- Supports NZ and AU websites and product apps! (I cannot test the product app functionality of the New Zealand Site, but it looks like it should work)
 
 ## Special Thanks
 A massive thanks goes to Johan Lindell for the [barcode generation tool (JsBarcode)](https://github.com/lindell/JsBarcode) used
