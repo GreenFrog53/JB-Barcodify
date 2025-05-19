@@ -34,3 +34,10 @@ p {
     margin: 5px 0;
     list-style: none;
 }
+.settings_container {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+    padding-bottom: 8px;
+}
