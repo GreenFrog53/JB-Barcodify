@@ -4,8 +4,9 @@ setInterval(() => {
     const hasJBProducts = elements.some(h3 => h3.textContent.trim() === "JB Products");
 
     // display message inside of the product app
-    const mainMessage = document.querySelector('.css-1hk9k3n, .css-1gf9cnm');
-    const myMessage = document.querySelector('.existingMessage');
+    try {
+        const mainMessage = document.querySelector('.css-1hk9k3n, .css-1gf9cnm');
+        const myMessage = document.querySelector('.existingMessage');
         if (mainMessage && !myMessage) {
             const newDiv = document.createElement('p');
             newDiv.textContent = 'JB Barcodify technology inside. If rendering issues occur, please disable the Product App options in the JB Barcodify extension menu.';
@@ -14,6 +15,11 @@ setInterval(() => {
             newDiv.style.color = 'grey'; 
             mainMessage.parentNode.insertBefore(newDiv, mainMessage);
         }
+    } 
+    catch (error) {
+        clearInterval(intervalId);
+    }
+    
 
 
     // check settings
