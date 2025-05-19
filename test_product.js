@@ -3,6 +3,19 @@ setInterval(() => {
     const elements = Array.from(document.getElementsByTagName('h3'));
     const hasJBProducts = elements.some(h3 => h3.textContent.trim() === "JB Products");
 
+    // display message inside of the product app
+    const mainMessage = document.querySelector('.css-1hk9k3n, .css-1gf9cnm');
+    const myMessage = document.querySelector('.existingMessage');
+        if (mainMessage && !myMessage) {
+            const newDiv = document.createElement('p');
+            newDiv.textContent = 'JB Barcodify technology inside. If rendering issues occur, please disable the Product App options in the JB Barcodify extension menu.';
+            newDiv.classList.add('existingMessage');
+            newDiv.style.textAlign = 'center';
+            newDiv.style.color = 'grey'; 
+            mainMessage.parentNode.insertBefore(newDiv, mainMessage);
+        }
+
+
     // check settings
     chrome.storage.local.get(["productSearch"], (result) => { 
         if (result.productSearch === undefined) {
