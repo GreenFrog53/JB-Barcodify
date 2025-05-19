@@ -1,24 +1,31 @@
 
-setInterval(() => {
+const intervalId = setInterval(() => {
     const elements = Array.from(document.getElementsByTagName('h3'));
     const hasJBProducts = elements.some(h3 => h3.textContent.trim() === "JB Products");
 
-    // display message inside of the product app
-    try {
-        const mainMessage = document.querySelector('.css-1hk9k3n, .css-1gf9cnm');
-        const myMessage = document.querySelector('.existingMessage');
-        if (mainMessage && !myMessage) {
-            const newDiv = document.createElement('p');
-            newDiv.textContent = 'JB Barcodify technology inside. If rendering issues occur, please disable the Product App options in the JB Barcodify extension menu.';
-            newDiv.classList.add('existingMessage');
-            newDiv.style.textAlign = 'center';
-            newDiv.style.color = 'grey'; 
-            mainMessage.parentNode.insertBefore(newDiv, mainMessage);
+    
+
+    chrome.storage.local.get(["productSearch", "productListing"], (result) => {
+        if (result.productSearch === false && result.productListing === false) {
+            console.log("JB Barcodify: Both productSearch and productListing are false.");
+            clearInterval(intervalId); // Stop the interval as there is no point looking for anything, as the settings are false
         }
-    } 
-    catch (error) {
-        clearInterval(intervalId);
-    }
+        else {
+            // display an info message inside of the product app
+            const mainMessage = document.querySelector('.css-1hk9k3n, .css-1gf9cnm');
+            const myMessage = document.querySelector('.existingMessage');
+            if (mainMessage && !myMessage) {
+                const newDiv = document.createElement('p');
+                newDiv.textContent = 'JB Barcodify technology inside. If rendering issues occur, please disable the Product App options in the JB Barcodify extension menu.';
+                newDiv.classList.add('existingMessage');
+                newDiv.style.textAlign = 'center';
+                newDiv.style.color = 'grey'; 
+                mainMessage.parentNode.insertBefore(newDiv, mainMessage);
+            }
+        } 
+    });
+
+
     
 
 
