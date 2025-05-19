@@ -18,6 +18,53 @@ document.addEventListener('keydown', function(event) {
     else if (event.code === 'KeyF') { // Check if the F key is pressed
         chrome.tabs.create({ url: 'http://fulfilment.jbhifi.tech/' }); // redirect to fulfilment :)
     }
+    else if (event.code === 'KeyR') { // Check if the R key is pressed
+        chrome.tabs.create({ url: 'https://receiptlookupprod.z26.web.core.windows.net/' }); // redirect to receipt lookup :)
+    }
+
+    else if (event.code === 'Slash' || event.code === '?') { // check if the slash key is pressed
+        console.log('Key pressed!');
+        const introducingContainer = document.querySelector('.introducing_container');
+        if (introducingContainer) {
+            const siblingDiv = document.createElement('div');
+            siblingDiv.style.textAlign = 'center'; // Center the text
+            siblingDiv.className = 'hidden_container'; // Add the class name
+            
+            const heading = document.createElement('h1');
+            heading.textContent = "Testing";
+            siblingDiv.appendChild(heading);
+
+            const paragraph = document.createElement('p');
+            paragraph.textContent = "Heyo, I'm testing some keyboard shortcuts, lemme know if you think they're useful. Please note you need to click on the extension icon first :)";
+            siblingDiv.appendChild(paragraph);
+
+            const paragraph2 = document.createElement('p');
+            paragraph2.innerHTML = "<strong>Spacebar</strong> = Switch User";
+            siblingDiv.appendChild(paragraph2);
+
+            const paragraph4 = document.createElement('p');
+            paragraph4.innerHTML = "<strong>M Key</strong> = Microsoft Application Launcher";
+            siblingDiv.appendChild(paragraph4);
+
+            const paragraph3 = document.createElement('p');
+            paragraph3.innerHTML = "<strong>S Key</strong> = Solvup";
+            siblingDiv.appendChild(paragraph3);
+
+            const paragraph7 = document.createElement('p');
+            paragraph7.innerHTML = "<strong>R Key</strong> = Receipt Lookup";
+            siblingDiv.appendChild(paragraph7);
+
+            const paragraph5 = document.createElement('p');
+            paragraph5.innerHTML = "<strong>P Key</strong> = Product App";
+            siblingDiv.appendChild(paragraph5);
+
+            const paragraph6 = document.createElement('p');
+            paragraph6.innerHTML = "<strong>F Key</strong> = Fulfilment App";
+            siblingDiv.appendChild(paragraph6);
+
+            introducingContainer.parentNode.insertBefore(siblingDiv, introducingContainer.nextSibling);
+        }
+    }
 
 
 });
