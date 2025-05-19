@@ -8,6 +8,8 @@ Just a simple little chrome extension I made for people who work at JB Hi-Fi in 
 - Carousel support with different configurations and colours, auto updates the barcode and the Product App link
 - Converts the PLU on the product app to a barcode for easier internal inventory querys
 - Supports NZ and AU websites and product apps! (I cannot test the product app functionality of the New Zealand Site, but it looks like it should work)
+- Testing shortcuts for easier access to web apps
+- Configuration toggles in the extension pop-up
 
 ## Special Thanks
 A massive thanks goes to Johan Lindell for the [barcode generation tool (JsBarcode)](https://github.com/lindell/JsBarcode) used
