@@ -11,53 +11,72 @@ const skuElement = document.querySelector('.zm2jk12#pdp-title-sku');
 
 
 
-// Actual code to be run every time the plu element is found, therefore not at a 404 page
+// Find out whether the settings page has allowed the mofifications to run on this page
 
-if (pluElement) {
+chrome.storage.local.get(["websiteToggle"], (result) => { 
+  if (result.websiteToggle === undefined) {
+    enabled()
+    console.log("JB Barcodify: The barcode will be displayed, as the websiteToggle setting has not been set.");
+  }
+  else if (result.websiteToggle === true){
+    enabled()
+    console.log("JB Barcodify: The barcode will be displayed, as the websiteToggle setting is true.");
+  }
+  else {
+    console.log("JB Barcodify: The barcode will not be displayed, as the websiteToggle setting is false.");
+  }
+});
 
 
-  // To be run when the webpage is first loaded
-  // removeAnnoyances();
-  const barcodeSvg = createBarcode();
-  const buttonElement = createProductAppButton();
 
+function enabled() {
+  if (pluElement) {
+
+
+    // To be run when the webpage is first loaded
+    // removeAnnoyances();
+    const barcodeSvg = createBarcode();
+    const buttonElement = createProductAppButton();
   
-
-
-
-  // Detects when the page URL has changed (due to carousel involvement and updates the PLU Barcode). Listens to message from background.js
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message.url) {
-      
-      console.log("Page Change detected");
-      
-      const currentPlu = pluElement.textContent.split(':')[1].trim();
-      JsBarcode("#barcode", currentPlu, {
-        displayValue: false,
-        margin: 0,
-        height: 27
-      });
-      console.log("Barcode Updated to PLU: " + currentPlu);
-
-      const currentSku = skuElement.textContent.split(':')[1].trim();
-      buttonElement.href = "https://products.jbhifi.tech/product/" + currentSku;
-      console.log("Product App Button Updated to SKU: " + currentSku);
-
-    }
-  });
-
-  // detects when the product app button is clicked
-  buttonElement.addEventListener('click', () => {
-    console.log("Product App Button Clicked: " + buttonElement.href);
-    window.open(buttonElement.href, "_blank");
-
-  });
-
-
-} 
-else {
-  console.log("PLU element not found on this webpage.");
+    
+  
+  
+  
+    // Detects when the page URL has changed (due to carousel involvement and updates the PLU Barcode). Listens to message from background.js
+    chrome.runtime.onMessage.addListener((message) => {
+      if (message.url) {
+        
+        console.log("Page Change detected");
+        
+        const currentPlu = pluElement.textContent.split(':')[1].trim();
+        JsBarcode("#barcode", currentPlu, {
+          displayValue: false,
+          margin: 0,
+          height: 27
+        });
+        console.log("Barcode Updated to PLU: " + currentPlu);
+  
+        const currentSku = skuElement.textContent.split(':')[1].trim();
+        buttonElement.href = "https://products.jbhifi.tech/product/" + currentSku;
+        console.log("Product App Button Updated to SKU: " + currentSku);
+  
+      }
+    });
+  
+    // detects when the product app button is clicked
+    buttonElement.addEventListener('click', () => {
+      console.log("Product App Button Clicked: " + buttonElement.href);
+      window.open(buttonElement.href, "_blank");
+  
+    });
+  
+  
+  } 
+  else {
+    console.log("PLU element not found on this webpage.");
+  }
 }
+
 
 
 function createBarcode() {

@@ -1,10 +1,37 @@
 // Code to be run on the product app page
 
-entry();
+// check settings
+chrome.storage.local.get(["productListing"], (result) => { 
+    if (result.productListing === undefined) {
+        entry();
+        console.log("JB Barcodify: The barcode will be displayed, as the productListing setting has not been set.");
+    }
+    else if (result.productListing === true){
+        entry();
+        console.log("JB Barcodify: The barcode will be displayed, as the productListing setting is true.");
+    }
+    else {
+        console.log("JB Barcodify: The barcode will not be displayed, as the productListing setting is false.");
+    }
+  });
 
 // When a page change is detected
 chrome.runtime.onMessage.addListener((message) => {
-    entry();
+    
+    // check settings
+    chrome.storage.local.get(["productListing"], (result) => { 
+        if (result.productListing === undefined) {
+            entry();
+            console.log("JB Barcodify: The barcode will be displayed, as the productListing setting has not been set.");
+        }
+        else if (result.productListing === true){
+            entry();
+            console.log("JB Barcodify: The barcode will be displayed, as the productListing setting is true.");
+        }
+        else {
+            console.log("JB Barcodify: The barcode will not be displayed, as the productListing setting is false.");
+        }
+      });
 });
 
 

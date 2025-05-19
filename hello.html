@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>JB Barcodify</title>
         <link rel="stylesheet" href="popup.css">
-        <script src="popup.js"></script>
+        
     </head>
     <body>
         <div class="container">
@@ -17,17 +17,17 @@
         </div>
         <div class="settings_container">
             <label>
-                <input type="checkbox" name="feature1">
+                <input type="checkbox" id="website-toggle">
                 Enable Barcodes on JB Website
             </label>
             <br>
             <label>
-                <input type="checkbox" name="feature2">
+                <input type="checkbox" id="product-search">
                 Enable Barcodes on Product App Search (experimental)
             </label>
             <br>
             <label>
-                <input type="checkbox" name="feature3">
+                <input type="checkbox" id="product-listing">
                 Enable Barcodes on Product App listings
             </label>
 
@@ -38,4 +38,5 @@
             <p>Added support for barcodes on the New Zealand website</p>
         </div>
     </body>
+    <script src="popup.js"></script>
 </html>
