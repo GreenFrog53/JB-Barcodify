@@ -1,9 +1,27 @@
+// Takes u to the login / switch user page
 document.addEventListener('keydown', function(event) {
     if (event.code === 'Space') { // Check if the spacebar is pressed
-        console.log('The spacebar has been hit')
         chrome.tabs.create({ url: 'https://m365.cloud.microsoft/login?es=Click&ru=%2Fapps%3Fhome%3D1%26acctsw%3D1&prompt=select_account' }); // redirect to sign in :)
     }
+    else if (event.code === 'KeyM') { // Check if the M key is pressed
+        chrome.tabs.create({ url: 'https://myapps.microsoft.com/' }); // redirect to sign in :)
+    }
+    else if (event.code === 'KeyP') { // Check if the P key is pressed
+        chrome.tabs.create({ url: 'https://products.jbhifi.tech/' }); // redirect to product app :)
+    }
+    else if (event.code === 'KeyI') { // Check if the I key is pressed
+        chrome.tabs.create({ url: 'http://intranet/' }); // redirect to intranet :)
+    }
+    else if (event.code === 'KeyS') { // Check if the S key is pressed
+        chrome.tabs.create({ url: 'https://launcher.myapps.microsoft.com/api/signin/46749113-3e12-47a7-8971-b0eab9c2338f' }); // redirect to solvup :)
+    }
+    else if (event.code === 'KeyF') { // Check if the F key is pressed
+        chrome.tabs.create({ url: 'http://fulfilment.jbhifi.tech/' }); // redirect to fulfilment :)
+    }
+
+
 });
+
 
 // Checkboxes for settings
 
