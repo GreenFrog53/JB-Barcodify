@@ -2,9 +2,9 @@
   "manifest_version": 3,
   "name": "JB Barcodify",
   "description": "JB Website Barcode Generator",
-  "version": "1.5",
+  "version": "1.6",
   "action": {
-    "default_popup": "hello.html",
+    "default_popup": "popup/hello.html",
     "default_icon": {
       "16": "images/icon16.png",
       "32": "images/icon32.png",
@@ -29,11 +29,17 @@
         "https://www.jbhifi.com.au/products/*",
         "https://www.jbhifi.co.nz/products/*"
         ],
-      "js": ["JsBarcode.js", "content.js"]
+      "js": ["JsBarcode.js", "jb-site/content.js"]
       },
     {
       "matches": ["https://products.jbhifi.tech/*"],
-      "js": ["JsBarcode.js", "content_product_app.js", "test_product.js"]
+      "js": ["JsBarcode.js", "product-app/content_product_app.js", "product-app/test_product.js"]
       }
-    ]
+    ],
+    "web_accessible_resources": [
+    {
+      "resources": ["injected-script.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
