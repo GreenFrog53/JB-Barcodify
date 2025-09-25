@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>JB Barcodify</title>
+        <link rel="stylesheet" href="popup.css">
+        
+    </head>
+    <body>
+        
+        <!-- Heading -->
+        <div class="container">
+            <h1>JB Barcodify</h1>
+        </div>
+
+        <!-- Navigation Tab Bar -->
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab="shortcuts">Shortcuts</button>
+            <button class="tab-button" data-tab="settings">Settings</button>
+            <button class="tab-button" data-tab="info">Information</button>
+        </div>
+
+        <!-- Tabbed Content -->
+        <div class="tabbed-content">
+
+            <!-- Shortcuts -->
+            <div class="tab-panel active" id="shortcuts">
+
+                <div class="hint">
+                    <p>Shortcuts are accessible using keyboard keys :)</p>
+                </div>
+
+                <div class="shortcut-buttons">
+                    <button class="shortcut-button" id="switch-user">Switch User <span class="key-text">(Spacebar)</span></button>
+                    <button class="shortcut-button" id="my-apps">My Apps <span class="key-text">(M key)</span></button>
+                    <button class="shortcut-button" id="solvup">Solvup <span class="key-text">(S key)</span></button>
+                    <button class="shortcut-button" id="receipt-lookup">Receipt Lookup <span class="key-text">(R key)</span></button>
+                    <button class="shortcut-button" id="product-app">Product App <span class="key-text">(P key)</span></button>
+                    <button class="shortcut-button" id="fulfilment-app">Fulfilment App <span class="key-text">(F key)</span></button>
+                    <button class="shortcut-button" id="intranet">Intranet <span class="key-text">(I key)</span></button>
+                    <button class="shortcut-button" id="zendesk">Zendesk <span class="key-text">(Z key)</span></button>
+                    <button class="shortcut-button" id="backstage">Backstage <span class="key-text">(B key)</span></button>
+                    <button class="shortcut-button" id="t2w">Time 2 Work <span class="key-text">(T key)</span></button>
+                </div>
+                
+            </div>
+            
+            <!-- Settings -->
+            <div class="tab-panel" id="settings">
+                <div class="settings_container">
+                    <label>
+                        <h3>Website</h3>
+                        <input type="checkbox" id="website-toggle">
+                        Barcodes and Product App Button
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" id="website-extra-toggle">
+                        Internal Info Section
+                    </label>
+                    <br>
+                    <label>
+                        <h3>Product App</h3>
+                        <input type="checkbox" id="product-search">
+                        Barcodes in search (experimental)
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" id="product-listing">
+                        Barcodes on product listings
+                    </label>
+
+                </div>
+            </div>
+
+            <!-- Information -->
+            <div class="tab-panel" id="info">
+                <div class="container">
+                    <p>This extension displays a simple little barcode on the JB Website and the Product App, so that you can easily scan products onto your PDA.</p>
+                    <p>If you have any requests, complaints or issues with this extension, I'd be happy to resolve them. Simply email me at <a href="mailto:chromewebstore@waggles.au">chromewebstore@waggles.au</a>.</p>
+                    <p>Thanks for using the extension, I hope it makes work just a little bit easier!</p>
+                </div>
+                <div class="introducing_container">
+                    <h1>New Features:</h5>
+                    <p>New Internal Info section on the website (can be toggled in settings) ⚙️</p>
+                    <p>Moved Product App button location to interfere less 🛠️</p>
+                    <p>Revamped extension pop up with shortcuts section 🚀</p>
+                    <h1>Coming Soon</h1>
+                    <p>SOH levels on the website (maybe) 🎉</p>
+                    <p>A long overdue code rewrite 🩹</p>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+
+    <script src="popup.js"></script>
+
+</html>

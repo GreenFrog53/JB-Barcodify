@@ -1,0 +1,146 @@
+.hint {
+    color: #555;
+    text-align: center;
+}
+
+
+body {
+    font-family: "Gill Sans", sans-serif;
+    width: 500px;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.container {
+    text-align: center;
+    padding-bottom: 8px;
+}
+
+h1 {
+    font-size: 18px;
+    color: #333;
+}
+
+p {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+    padding-bottom: 3px;
+}
+.introducing_container {
+    text-align: center;
+}
+.introducing_container h1 {
+    font-size: 14px;
+    color: #333;
+}
+.introducing_container p {
+    font-size: 12px;
+    color: #555;
+    margin: 5px 0;
+    list-style: none;
+    
+}
+.settings_container {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+    padding-bottom: 8px;
+}
+.hidden_container {
+    padding-top: 8px;
+}
+.hidden_container h1 {
+    font-size: 14px;
+    color: #333;
+}
+
+.settings_container h3 {
+    margin-bottom: 3px;
+}
+
+
+
+
+
+
+
+
+
+/* Tabs Stuff */
+
+.tab-nav { /* Line on the Bottom */
+    display: flex;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.tab-button { /* Makes the button pretty */
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    background-color: #f5f5f5;
+}
+
+.tab-button.active {
+    border-bottom-color: #007cba;
+    color: #007cba;
+
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+
+
+/* Shortcuts CSS */
+
+.shortcut-buttons {
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.shortcut-button {
+    flex: 0 0 calc(50% - 4px);
+    max-width: calc(50% - 4px);
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.shortcut-button:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.shortcut-button:active {
+    background: #dee2e6;
+    transform: translateY(1px);
+}
+
+.shortcut-button .key-text {
+    color: #888;
+    font-weight: normal;
+}
+
+

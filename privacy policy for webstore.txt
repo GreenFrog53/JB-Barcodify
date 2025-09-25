@@ -1,0 +1,29 @@
+Privacy Policy
+
+Last updated: 01/07/2024
+
+Thank you for using JB Barcodify. Your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Chrome extension. Please read this policy carefully to understand our views and practices regarding your personal data and how we will treat it.
+
+1. Information We Collect
+
+We do not collect any personal information. The extension will take information from the Australia JB Hi-Fi site and process it into a barcode and into a link to open on the internal only Product App. This is done entirely locally and never leaves your system.
+
+2. Use of Information
+
+The Extension uses the data you provide solely for the purpose of generating barcodes and creating a Product App link. These tasks are all performed locally.
+
+3. Disclosure of Information
+
+Since we do not collect personal information, we do not disclose any personal information to third parties. The data you provide is only used in real-time to generate barcodes and create a Product App link.
+
+4. Third-Party Services
+
+The Extension does not interact with third party services.
+
+5. Data Security
+
+We do not store or process any data of any kind.
+
+6. Changes to This Privacy Policy
+
+We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy when appropriate.
