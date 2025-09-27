@@ -293,10 +293,126 @@ function createBarcodeElement() {
 
 }
 
+// Function to extract the season code from the website. Add the dictionary definition
+function getSeasonCode() {
+  const scripts = Array.from(document.querySelectorAll('script'));
+  const targetScript = scripts.find(script => script.textContent.includes('product.metafields'));
+  console.log("getSeasonCode() ran");
+
+  if (targetScript) {
+
+    // extract the value of "SeasonCode"
+    const match = targetScript.textContent.match(/"SeasonCode":"(.*?)"/);
+
+    if (match && match[1]) {
+        console.log("SeasonCode:", match[1]); // Logs the value of SeasonCode
+
+        if (match[1] == "M") {
+          return match[1] + " (Hardware Managed Stock)";
+        }
+        else if (match[1] == "E") {
+          return match[1] + " (CD/DVD Essential Range)";
+        }
+        else if (match[1] == "MW") {
+          return match[1] + " (Managed Warehouse)";
+        }
+        else if (match[1] == "MW+") {
+          return match[1] + " (Managed Warehouse Event)";
+        }
+        else if (match[1] == "M+") {
+          return match[1] + " (Managed Stock, Product Managers)";
+        }
+        else if (match[1] == "NR") {
+          return match[1] + " (New Release)";
+        }
+        else if (match[1] == "D") {
+          return match[1] + " (Deleted Range, not to be re-ordered)";
+        }
+        else if (match[1] == "S") {
+          return match[1] + " (CD/DVD Specialist Range)";
+        }
+        else if (match[1] == "Q") {
+          return match[1] + " (Quit Stock, to be cleared)";
+        }
+        else if (match[1] == "A") {
+          return match[1] + " (Hardware Stock, ranged in all stores)";
+        }
+        else if (match[1] == "A") {
+          return match[1] + " (Hardware Stock, ranged in all stores)";
+        }
+        else if (match[1] == "SW") {
+          return match[1] + " (Steering Wheel Games)";
+        }
+        else if (match[1] == "Z") {
+          return match[1] + " (Online Only Product)";
+        }
+        else if (match[1] == "Z+") {
+          return match[1] + " (Online Only Product + Select Stores)";
+        }
+        else if (match[1] == "W") {
+          return match[1] + " (Online Only Product)";
+        }
+        else if (match[1] == "X") {
+          return match[1] + " (Not to be sold or ordered)";
+        }
+        else if (match[1] == "EL") {
+          return match[1] + " (End of Life)";
+        }
+        else if (match[1] == "CAMERA") {
+          return match[1] + " (Full Camera Stores Only)";
+        }
+        else if (match[1] == "FIRM SALE") {
+          return match[1] + " (Firm Sale Product, cannot be returned)";
+        }
+        else if (match[1] == "CHART") {
+          return match[1] + " (CD/DVD Chart)";
+        }
+        else if (match[1] == "O") {
+          return match[1] + " (CD/DVD Optional Range)";
+        }
+        else if (match[1] == "COM") {
+          return match[1] + " (Commercial Exclusive Products)";
+        }
 
 
 
+        return match[1];
+    } else {
+        console.log("SeasonCode not found.");
+        return "N/A";
+    }
+  }
+  else {
+    console.log("SeasonCode not found. Way to locate it no longer works :(");
+    return "N/A";
+  }
 
+}
+
+
+
+// Function to extract the warranty info from the website
+function getWarranty() {
+  const scripts = Array.from(document.querySelectorAll('script'));
+  const targetScript = scripts.find(script => script.textContent.includes('product.metafields'));
+
+  if (targetScript) {
+    // Use a regular expression to extract the Manufacturer's warranty
+    const match = targetScript.textContent.match(/"Name":"Manufacturer's warranty","Values":\["(.*?)"\]/);
+
+    if (match && match[1]) {
+        console.log("Manufacturer's warranty:", match[1]); // Logs the warranty value
+        return match[1];
+    } else {
+        console.log("Manufacturer's warranty not found.");
+        return "N/A";
+    }
+  }
+  else {
+    console.log("Manufacturer's warranty not found. Way to locate it no longer works :(");
+    return "N/A";
+  }
+}
 
 
 
@@ -571,124 +687,9 @@ script.onload = () => script.remove();
 
 
 
-function getSeasonCode() {
-  const scripts = Array.from(document.querySelectorAll('script'));
-  const targetScript = scripts.find(script => script.textContent.includes('product.metafields'));
-  console.log("getSeasonCode() ran");
-
-  if (targetScript) {
-
-    // Use a regular expression to extract the value of "SeasonCode"
-    const match = targetScript.textContent.match(/"SeasonCode":"(.*?)"/);
-
-    if (match && match[1]) {
-        console.log("SeasonCode:", match[1]); // Logs the value of SeasonCode
-
-        if (match[1] == "M") {
-          return match[1] + " (Hardware Managed Stock)";
-        }
-        else if (match[1] == "E") {
-          return match[1] + " (CD/DVD Essential Range)";
-        }
-        else if (match[1] == "MW") {
-          return match[1] + " (Managed Warehouse)";
-        }
-        else if (match[1] == "MW+") {
-          return match[1] + " (Managed Warehouse Event)";
-        }
-        else if (match[1] == "M+") {
-          return match[1] + " (Managed Stock, Product Managers)";
-        }
-        else if (match[1] == "NR") {
-          return match[1] + " (New Release)";
-        }
-        else if (match[1] == "D") {
-          return match[1] + " (Deleted Range, not to be re-ordered)";
-        }
-        else if (match[1] == "S") {
-          return match[1] + " (CD/DVD Specialist Range)";
-        }
-        else if (match[1] == "Q") {
-          return match[1] + " (Quit Stock, to be cleared)";
-        }
-        else if (match[1] == "A") {
-          return match[1] + " (Hardware Stock, ranged in all stores)";
-        }
-        else if (match[1] == "A") {
-          return match[1] + " (Hardware Stock, ranged in all stores)";
-        }
-        else if (match[1] == "SW") {
-          return match[1] + " (Steering Wheel Games)";
-        }
-        else if (match[1] == "Z") {
-          return match[1] + " (Online Only Product)";
-        }
-        else if (match[1] == "Z+") {
-          return match[1] + " (Online Only Product + Select Stores)";
-        }
-        else if (match[1] == "W") {
-          return match[1] + " (Online Only Product)";
-        }
-        else if (match[1] == "X") {
-          return match[1] + " (Not to be sold or ordered)";
-        }
-        else if (match[1] == "EL") {
-          return match[1] + " (End of Life)";
-        }
-        else if (match[1] == "CAMERA") {
-          return match[1] + " (Full Camera Stores Only)";
-        }
-        else if (match[1] == "FIRM SALE") {
-          return match[1] + " (Firm Sale Product, cannot be returned)";
-        }
-        else if (match[1] == "CHART") {
-          return match[1] + " (CD/DVD Chart)";
-        }
-        else if (match[1] == "O") {
-          return match[1] + " (CD/DVD Optional Range)";
-        }
-        else if (match[1] == "COM") {
-          return match[1] + " (Commercial Exclusive Products)";
-        }
 
 
 
-        return match[1];
-    } else {
-        console.log("SeasonCode not found.");
-        return "N/A";
-    }
-  }
-  else {
-    console.log("SeasonCode not found. Way to locate it no longer works :(");
-    return "N/A";
-  }
-  
-  
-
-}
-
-function getWarranty() {
-  const scripts = Array.from(document.querySelectorAll('script'));
-  const targetScript = scripts.find(script => script.textContent.includes('product.metafields'));
-
-  if (targetScript) {
-    // Use a regular expression to extract the Manufacturer's warranty
-    const match = targetScript.textContent.match(/"Name":"Manufacturer's warranty","Values":\["(.*?)"\]/);
-
-    if (match && match[1]) {
-        console.log("Manufacturer's warranty:", match[1]); // Logs the warranty value
-        return match[1];
-    } else {
-        console.log("Manufacturer's warranty not found.");
-        return "N/A";
-    }
-  }
-  else {
-    console.log("Manufacturer's warranty not found. Way to locate it no longer works :(");
-    return "N/A";
-  }
-}
 
 
 
