@@ -229,7 +229,7 @@ function createInfoElement() {
     // Create a heading
     const headingElement = document.createElement("h6");
     if (inventoryDataLocation === null) {
-      headingElement.textContent = "Live Stock";
+      headingElement.textContent = "Stock Levels";
       headingElement.style.marginTop = "5px";
       headingElement.style.marginBottom = "5px";
       // Append to div
