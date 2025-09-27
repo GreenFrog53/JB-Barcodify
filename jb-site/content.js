@@ -3,55 +3,279 @@
 // lmao, its only going to be me :(
 
 // Global Variables
+let pageSku; // Contains the current SKU
+let pagePlu; // Contains the current PLU
+
 
 // Element Selectors
 // JB Barcodify Top Element barcodify-element
 const pluElement = document.querySelector('.zm2jk14#pdp-title-plu'); // PLU Element
 const skuElement = document.querySelector('.zm2jk12#pdp-title-sku'); // SKU Element
 const buttonElement = document.getElementById('pdp-call-to-action-wrapper'); // Call to action buttons (Being Depreciated)
+const pdpRight = document.getElementById("pdp-right-panel") // Element that contains the right hand side of the page.
 
 // Settings Selectors
-// let showBarcode = false; // Soon to be used
-// let showProductAppButton = false; // Soon to be used
+let showBarcode = false; // Soon to be used
+let showProductAppButton = false; // Soon to be used
 let showIntInfo = false; // False by default until settings are checked
-let showInventoryData = false; // Testing at this stage
+
+let showSohData = false; // Testing at this stage, should be false at start
+let inventoryDataLocation = null; // Testing at this stage
 
 // Temporary Flag Selectors
 let pageHasBeenRefreshed = false; // Will be set to true when a refresh is triggered
 
 
 
+// Check settings and change variables to match
+// Settings will only be checked on page refresh
+
+function loadSettings() {
+  return Promise.all([
+    // Show Internal Information
+    new Promise((resolve) => {
+      chrome.storage.local.get(["websiteExtraToggle"], (result) => { 
+        if (result.websiteExtraToggle === true){
+          showIntInfo = true; // Update settings variable
+          console.log("JB Barcodify Settings: The Internal Info Section will be displayed as the websiteExtraToggle is true.");
+        }
+        resolve();
+      });
+    }),
+
+    // Show Soh Data
+    new Promise((resolve) => {
+      chrome.storage.local.get(["websiteSohToggle"], (result) => { 
+        if (result.websiteSohToggle === true){
+          showSohData = true; // Update settings variable
+          console.log("JB Barcodify Settings: The Soh data Section will be displayed as the websiteSohToggle is true.");
+        }
+        resolve();
+      });
+    }),
+
+    // Show Barcodes and Product App Button
+    new Promise((resolve) => {
+      chrome.storage.local.get(["websiteToggle"], (result) => { 
+        if (result.websiteToggle === undefined) {
+          console.log("JB Barcodify Settings: The barcode will be displayed, as the websiteToggle setting has not been set.");
+          showBarcode = true;
+          showProductAppButton = true;
+        }
+        else if (result.websiteToggle === true){
+          console.log("JB Barcodify Settings: The barcode will be displayed, as the websiteToggle setting is true.");
+            showBarcode = true;
+            showProductAppButton = true;
+        }
+        else {
+          console.log("JB Barcodify Settings: The barcode will not be displayed, as the websiteToggle setting is false.");
+        }
+        resolve();
+      });
+    })
+  ]);
+}
+
+// Wait for settings to load before continuing
+loadSettings().then(() => {
+  console.log("All settings loaded, proceeding with initialization...");
+  
+  // First check if the page is valid
+  // Get Plu, SKU and save as global variables
+  // Create Barcodify element and set it 
+
+  if (checkPageValidity() && getPageDetails()) {
+    
+    createBarcodeElement();
+
+    createInfoElement();
+
+    
+    // Detects when the page URL has changed (due to carousel involvement and updates the PLU Barcode). Listens to message from background.js
+    chrome.runtime.onMessage.addListener((message) => {
+      if (message.url) {
+        
+        console.log("Page Change detected");
+        pageHasBeenRefreshed = true;
+        getPageDetails();
+        
+        // Update Barcode
+        if(showBarcode) {
+          JsBarcode("#barcode", pagePlu, {
+            displayValue: false,
+            margin: 0,
+            height: 27
+          });
+          console.log("Barcode Updated to PLU: " + pagePlu);
+        }
+        
+
+        // Update Internal info Section (including Product App Button)
+        createInfoElement();
+
+      }
+    });
 
 
-// for the int info section
-chrome.storage.local.get(["websiteExtraToggle"], (result) => { 
-  if (result.websiteExtraToggle === undefined) {
-    showIntInfo = false;
-    console.log("JB Barcodify: The Internal Info Section will not be displayed as the websiteExtraToggle setting has not been set.");
-  }
-  else if (result.websiteExtraToggle === true){
-    showIntInfo = true;
-    console.log("JB Barcodify: The Internal Info Section will be displayed as the websiteExtraToggle is true.");
-  }
-  else {
-    console.log("JB Barcodify: The Internal Info Section will not be displayed as the websiteExtraToggle is false.");
+
+
+
+
+
   }
 });
 
-// Find out whether the settings page has allowed the mofifications to run on this page
-chrome.storage.local.get(["websiteToggle"], (result) => { 
-  if (result.websiteToggle === undefined) {
-    enabled()
-    console.log("JB Barcodify: The barcode will be displayed, as the websiteToggle setting has not been set.");
+
+
+function createInfoElement() {
+
+  // Check if the info-element-section div already exists and remove it
+  const existingIntInfo = pdpRight.querySelector('.info-element-section');
+  if (existingIntInfo) {
+    existingIntInfo.remove();
+    console.log("Removed info-element-section for recreation.")
   }
-  else if (result.websiteToggle === true){
-    enabled()
-    console.log("JB Barcodify: The barcode will be displayed, as the websiteToggle setting is true.");
+
+  // Create the infoElement and give it the class 
+  const infoElement = document.createElement("div");
+  infoElement.classList.add('info-element-section');
+
+  // Apply styles to highlight the div
+  infoElement.style.padding = "5px"; // Add some padding
+  infoElement.style.paddingBottom = "20px"; // Add some padding
+  infoElement.style.paddingLeft = "24px";
+  infoElement.style.paddingRight = "24px";
+  infoElement.style.borderRadius = "5px"; // Add rounded corners (optional)
+
+  if (showIntInfo) {
+
+    // Create a heading
+    const headingElement = document.createElement("h6");
+    headingElement.textContent = "Internal Info";
+    headingElement.style.marginTop = "0px";
+    headingElement.style.marginBottom = "5px";
+    // Append to div
+    infoElement.appendChild(headingElement);
+
+    // Extra Internal info Stuff goes here
+
   }
+
+  if (showSohData) {
+
+    // Create a heading
+    const headingElement = document.createElement("h6");
+    headingElement.textContent = "Stock on Hand";
+    headingElement.style.marginTop = "5px";
+    headingElement.style.marginBottom = "5px";
+    // Append to div
+    infoElement.appendChild(headingElement);
+
+    // Extra soh info Stuff goes here
+
+  }
+
+  if (showProductAppButton) {
+
+    // Create a product app button
+    const viewButton = document.createElement("button");
+    viewButton.textContent = "Open in Product App";
+    viewButton.style.marginTop = "10px";
+    viewButton.style.padding = "13px";
+    viewButton.style.cursor = "pointer";
+    viewButton.style.width = "100%";
+    viewButton.style.fontWeight = "bold";
+    viewButton.href = "https://products.jbhifi.tech/product/" + pageSku;
+
+    infoElement.appendChild(viewButton);
+
+    viewButton.addEventListener('click', function() {
+      console.log("View button clicked!");
+      window.open(viewButton.href, "_blank");
+    });
+
+    // Create a blank div line for spacing
+    const blankDiv = document.createElement("div");
+    blankDiv.style.height = "10px";
+    infoElement.appendChild(blankDiv);
+
+    console.log("Button Created with SKU: "+ pageSku);
+
+  }
+
+  // Add to the page :)
+  pdpRight.insertBefore(infoElement, pdpRight.firstChild);
+
+}
+
+
+
+// Gets the SKU and PLU and saves to global variables
+function getPageDetails() {
+
+  // Get Sku
+  pageSku = skuElement.textContent.split(':')[1].trim()
+  console.log("Page SKU fetched: "+ pageSku);
+
+  // Get PLU
+  pagePlu = pluElement.textContent.split(':')[1].trim();
+  console.log("Page PLU fetched: "+ pagePlu);
+
+  return true;
+}
+
+
+
+// Checks the pages validity
+function checkPageValidity() {
+
+  // Check if barcodify settings are disabled, and if so, return false
+  if (showBarcode || showProductAppButton || showIntInfo ||showSohData) { }
   else {
-    console.log("JB Barcodify: The barcode will not be displayed, as the websiteToggle setting is false.");
+    return false;
   }
-});
+
+
+  // Stub function for later, assume page is valid for now :)
+
+  return true;
+
+}
+
+
+// Creates the barcode element
+function createBarcodeElement() {
+  
+  if (showBarcode) {
+
+    // Create the element for the barcode to sit
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.id = "barcode";
+    pluElement.insertBefore(svg, pluElement.firstChild);
+
+    // Call JsBarcode and generate the barcode
+    JsBarcode("#barcode", pagePlu, {
+      displayValue: false,
+      margin: 0,
+      height: 27
+    });
+    
+    console.log("Barcode Created with PLU: " + pagePlu);
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -111,27 +335,7 @@ function enabled() {
 
 
 
-function createBarcode() {
-  
-  // Extract the current PLU number (assuming it's after the colon)
-  const currentPlu = pluElement.textContent.split(':')[1].trim();
-  
-  // Create the element for the barcode to sit
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.id = "barcode";
-  pluElement.insertBefore(svg, pluElement.firstChild);
 
-  // Call JsBarcode and generate the barcode
-  JsBarcode("#barcode", currentPlu, {
-    displayValue: false,
-    margin: 0,
-    height: 27
-  });
-  
-  console.log("Barcode Created with PLU: " + currentPlu);
-
-  return svg;
-}
 
 
 function createProductAppButton() {
