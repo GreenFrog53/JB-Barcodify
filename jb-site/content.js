@@ -2,15 +2,25 @@
 // Goodluck to anyone that actually wants to do anything :/
 // lmao, its only going to be me :(
 
+// Global Variables
 
-let pageHasBeenRefreshed = false;
-let showIntInfo = false;
+// Element Selectors
+// JB Barcodify Top Element barcodify-element
+const pluElement = document.querySelector('.zm2jk14#pdp-title-plu'); // PLU Element
+const skuElement = document.querySelector('.zm2jk12#pdp-title-sku'); // SKU Element
+const buttonElement = document.getElementById('pdp-call-to-action-wrapper'); // Call to action buttons (Being Depreciated)
 
-// Selectors for all of the elements
+// Settings Selectors
+// let showBarcode = false; // Soon to be used
+// let showProductAppButton = false; // Soon to be used
+let showIntInfo = false; // False by default until settings are checked
+let showInventoryData = false; // Testing at this stage
 
-const pluElement = document.querySelector('.zm2jk14#pdp-title-plu'); // PLU
-const buttonElement = document.getElementById('pdp-call-to-action-wrapper'); // Call to action buttons
-const skuElement = document.querySelector('.zm2jk12#pdp-title-sku'); // Here is the SKU
+// Temporary Flag Selectors
+let pageHasBeenRefreshed = false; // Will be set to true when a refresh is triggered
+
+
+
 
 
 // for the int info section
@@ -207,7 +217,43 @@ function createIntInfo() {
     warrantyElement.textContent = "Manufacturers Warranty: " + getWarranty(); 
     warrantyElement.style.margin = "0px";
     firstChildDiv.appendChild(warrantyElement);
+
   }
+
+if (showIntInfo && showInventoryData) {
+
+  // Create a element for a heading
+  const headingElement = document.createElement("h6");
+  headingElement.textContent = "Inventory"; // Set the text content of the H1
+  headingElement.style.marginTop = "5px";
+  headingElement.style.marginBottom = "5px";
+  // Append to div
+  firstChildDiv.appendChild(headingElement);
+
+
+
+
+
+  // Create SOH element with loading text initially
+  let sohElement = document.createElement("p");
+  sohElement.textContent = "Available SOH: Loading...";
+  sohElement.style.margin = "0px";
+  firstChildDiv.appendChild(sohElement);
+
+  // Get inventory data for the sku (wait for the Promise to resolve)
+  getInventoryData(345, 43)
+    .then(currentData => {
+      if (currentData && currentData.SaleableSoh !== undefined) {
+        sohElement.textContent = "Available SOH: " + currentData.SaleableSoh;
+      } else {
+        sohElement.textContent = "Available SOH: N/A";
+      }
+    })
+    .catch(error => {
+      console.error('Error loading inventory data:', error);
+      sohElement.textContent = "Available SOH: Error loading data";
+    });
+}
 
   
 
@@ -392,4 +438,37 @@ function getWarranty() {
     console.log("Manufacturer's warranty not found. Way to locate it no longer works :(");
     return "N/A";
   }
+}
+
+
+
+
+
+// Following is code for the API calls that are being tested for inventory :)
+
+// Make getInventoryData return a Promise
+function getInventoryData(apiSku, apiLocationId) {
+  return fetch('http://localhost:3000/0')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`getInventoryData: HTTP error! Status: ${response.status}`);
+      }
+      return response.json(); 
+    })
+    .then(data => {
+      const inventoryData = data[0];
+      console.log('getInventoryData: Inventory data loaded:', inventoryData);
+
+      // examples for testing
+      console.log("SKU:", inventoryData.Sku);
+      console.log("Saleable Stock on Hand:", inventoryData.SaleableSoh);
+      console.log("Location ID:", inventoryData.LocationId);
+      console.log("Exhaustion Date:", inventoryData.ExhaustionDate);
+      
+      return inventoryData; // Return the data
+    })
+    .catch(error => {
+      console.error('Failed to fetch inventory:', error);
+      return null; // Return null on error
+    });
 }
