@@ -6,6 +6,8 @@
 let pageSku; // Contains the current SKU
 let pagePlu; // Contains the current PLU
 
+let apiUrl = "https://api-lb01.jbhifi.com.au/InventoryApi/api/Detail?"
+
 
 // Element Selectors
 // JB Barcodify Top Element barcodify-element
@@ -20,7 +22,7 @@ let showProductAppButton = false; // Soon to be used
 let showIntInfo = false; // False by default until settings are checked
 
 let showSohData = false; // Testing at this stage, should be false at start
-let inventoryDataLocation = null; // Testing at this stage
+let inventoryDataLocation = 43; // Testing at this stage
 
 // Temporary Flag Selectors
 let pageHasBeenRefreshed = false; // Will be set to true when a refresh is triggered
@@ -142,7 +144,7 @@ function createInfoElement() {
 
   // Apply styles to highlight the div
   infoElement.style.padding = "5px"; // Add some padding
-  infoElement.style.paddingBottom = "20px"; // Add some padding
+  infoElement.style.paddingBottom = "15px"; // Add some padding
   infoElement.style.paddingLeft = "24px";
   infoElement.style.paddingRight = "24px";
   infoElement.style.borderRadius = "5px"; // Add rounded corners (optional)
@@ -155,11 +157,6 @@ function createInfoElement() {
     parentElement.appendChild(infoElement);
     return infoElement;
   }
-
-
-
-
-
 
   if (showIntInfo) {
 
@@ -181,8 +178,15 @@ function createInfoElement() {
       infoElement.appendChild(disclaimerElement);
     }
 
-    createInfoItem("Season", getSeasonCode(), infoElement);
-    createInfoItem("Manufacturers Warranty", getWarranty(), infoElement);
+    // Create a div to prettify internal info
+    const infoDiv = document.createElement("div");
+    infoDiv.style.padding = "10px";
+    infoDiv.style.backgroundColor = "#f0f0f0";
+    
+    createInfoItem("Season", getSeasonCode(), infoDiv);
+    createInfoItem("Manufacturers Warranty", getWarranty(), infoDiv);
+
+    infoElement.appendChild(infoDiv);
 
     // Extra Internal info Stuff goes here
 
@@ -192,11 +196,39 @@ function createInfoElement() {
 
     // Create a heading
     const headingElement = document.createElement("h6");
-    headingElement.textContent = "Stock on Hand";
-    headingElement.style.marginTop = "5px";
-    headingElement.style.marginBottom = "5px";
-    // Append to div
-    infoElement.appendChild(headingElement);
+    if (inventoryDataLocation === null) {
+      headingElement.textContent = "Live Stock";
+      headingElement.style.marginTop = "5px";
+      headingElement.style.marginBottom = "5px";
+      // Append to div
+      infoElement.appendChild(headingElement);
+
+      const disclaimerElement = document.createElement("p");
+      disclaimerElement.textContent = "Please set a store location in the extension settings."
+      disclaimerElement.style.margin = "0px";
+      disclaimerElement.style.color = "#666";
+      infoElement.appendChild(disclaimerElement);
+
+    }
+    else {
+      headingElement.textContent = "Live Stock ("+ inventoryDataLocation + ")";
+      headingElement.style.marginTop = "5px";
+      headingElement.style.marginBottom = "5px";
+      infoElement.appendChild(headingElement);
+
+      // Create a new div to contain the actual results and stock
+      const stockDiv = document.createElement("div");
+      stockDiv.style.padding = "10px";
+      stockDiv.style.backgroundColor = "#f0f0f0";
+      stockDiv.innerHTML = "Loading...";
+      
+      getInventoryData(pageSku, inventoryDataLocation, stockDiv)
+
+      infoElement.appendChild(stockDiv);
+
+
+    }
+    
 
     // Extra soh info Stuff goes here
 
@@ -416,243 +448,68 @@ function getWarranty() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function enabled() {
-  if (pluElement) {
-
-
-    // To be run when the webpage is first loaded
-    const barcodeSvg = createBarcode();
-    // const buttonElement = createProductAppButton();
-    createIntInfo();
-  
-    
-  
-  
-  
-    // Detects when the page URL has changed (due to carousel involvement and updates the PLU Barcode). Listens to message from background.js
-    chrome.runtime.onMessage.addListener((message) => {
-      if (message.url) {
-        
-        console.log("Page Change detected");
-        pageHasBeenRefreshed = true;
-        
-        const currentPlu = pluElement.textContent.split(':')[1].trim();
-        JsBarcode("#barcode", currentPlu, {
-          displayValue: false,
-          margin: 0,
-          height: 27
-        });
-        console.log("Barcode Updated to PLU: " + currentPlu);
-        
-        /* code for old button
-        const currentSku = skuElement.textContent.split(':')[1].trim();
-        buttonElement.href = "https://products.jbhifi.tech/product/" + currentSku;
-        console.log("Product App Button Updated to SKU: " + currentSku);
-        */
-        
-        createIntInfo();
-
+// Following is code for the API calls that are being tested for inventory :)
+function getInventoryData(apiSku, apiLocationId, stockDivInput) {
+  return fetch(apiUrl + "sku=" + apiSku + "&locationId=" + apiLocationId + "&time=" + Math.floor(Date.now() / 1000))
+    .then(response => {
+      if (!response.ok) {
+        stockDivInput.innerHTML = "An error occured.";
+        throw new Error(`getInventoryData: HTTP error! Status: ${response.status}`);
       }
-    });
-  
-    // detects when the product app button is clicked
-    buttonElement.addEventListener('click', () => {
-      console.log("Product App Button Clicked: " + buttonElement.href);
-      window.open(buttonElement.href, "_blank");
-  
-    });
-  
-  
-  } 
-  else {
-    console.log("PLU element not found on this webpage.");
-  }
-}
+      return response.json(); 
+    })
+    .then(data => {
+      const inventoryData = data[0];
+      console.log('getInventoryData: Inventory data loaded:', inventoryData);
 
+      stockDivInput.innerHTML = "";
 
+      // Apply grid styling to the container
+      stockDivInput.style.display = "grid";
+      stockDivInput.style.gridTemplateColumns = "1fr 1fr"; // 2 columns
+      stockDivInput.style.gap = "5px 25px"; // Space between items
+      stockDivInput.style.marginTop = "5px";
 
-
-
-
-function createProductAppButton() {
-  
-  // create a new button to be filled with info
-  const newButton = document.createElement('button');
-
-  // Set the attributes for the new button
-  newButton.href = "https://products.jbhifi.tech/product/" + skuElement.textContent.split(':')[1].trim(); // sets the url
-  newButton.textContent = "View Product App"; // sets the buttons text
-  newButton.target = "_blank"; // makes sure it opens in a new tab
-  newButton.classList.add("_2jjtjo3"); //makes the button fit in with the rest of the buttons
-  newButton.style.fontWeight = "bold"; // makes the text bold
-  newButton.style.textDecoration = "none"; // removes the underline from the text
-
-
-  // Appends the new button as a child of the buttonElement
-  //buttonElement.appendChild(newButton);
-  buttonElement.insertBefore(newButton, buttonElement.firstChild);
-
-
-  console.log("Button Created with SKU: " + skuElement.textContent.split(':')[1].trim());
-
-  return newButton;
-}
-
-
-
-
-
-// Create internal info Section
-function createIntInfo() {
-
-  // Find the Right Panel
-  const pdpRight = document.getElementById("pdp-right-panel");
-
-  // Check if the internal info div already exists and remove it
-  const existingIntInfo = pdpRight.querySelector('.internal-info-section');
-  if (existingIntInfo) {
-    existingIntInfo.remove();
-    console.log("Removed Internal Info Section for recreation.")
-  }
-
-  const firstChildDiv = document.createElement("div");
-  firstChildDiv.classList.add('internal-info-section');
-
-  // Apply styles to highlight the div
-
-  firstChildDiv.style.padding = "5px"; // Add some padding
-  firstChildDiv.style.paddingBottom = "20px"; // Add some padding
-  
-  firstChildDiv.style.paddingLeft = "24px";
-  firstChildDiv.style.borderRadius = "5px"; // Add rounded corners (optional)
-
-  if (showIntInfo) {
-    // Create an H1 element
-    const h1Element = document.createElement("h3");
-    h1Element.textContent = "Internal Info"; // Set the text content of the H1
-    h1Element.style.marginTop = "0px";
-    h1Element.style.marginBottom = "5px";
-    // Append the H1 to the new div
-    firstChildDiv.appendChild(h1Element);
-
-    if (pageHasBeenRefreshed) {
-      const disclaimerElement = document.createElement("p");
-      disclaimerElement.textContent = "Warning, internal info is not always acurate once a different varient is selected. Refresh for accurate info."
-      disclaimerElement.style.marginTop = "5px";
-      disclaimerElement.style.marginBottom = "5px";
-      disclaimerElement.style.color = "#666";
-      firstChildDiv.appendChild(disclaimerElement);
-    }
-
-
-
-    // Create a Season Code display
-    const seasonElement = document.createElement("p");
-    seasonElement.textContent = "Season: " + getSeasonCode(); // Set the text content of the H1
-    seasonElement.style.margin = "0px";
-    firstChildDiv.appendChild(seasonElement);
-
-    // Create a manufacturers warranty display
-    const warrantyElement = document.createElement("p");
-    warrantyElement.textContent = "Manufacturers Warranty: " + getWarranty(); 
-    warrantyElement.style.margin = "0px";
-    firstChildDiv.appendChild(warrantyElement);
-
-  }
-
-if (showIntInfo && showInventoryData) {
-
-  // Create a element for a heading
-  const headingElement = document.createElement("h6");
-  headingElement.textContent = "Inventory"; // Set the text content of the H1
-  headingElement.style.marginTop = "5px";
-  headingElement.style.marginBottom = "5px";
-  // Append to div
-  firstChildDiv.appendChild(headingElement);
-
-
-
-
-
-  // Create SOH element with loading text initially
-  let sohElement = document.createElement("p");
-  sohElement.textContent = "Available SOH: Loading...";
-  sohElement.style.margin = "0px";
-  firstChildDiv.appendChild(sohElement);
-
-  // Get inventory data for the sku (wait for the Promise to resolve)
-  getInventoryData(345, 43)
-    .then(currentData => {
-      if (currentData && currentData.SaleableSoh !== undefined) {
-        sohElement.textContent = "Available SOH: " + currentData.SaleableSoh;
-      } else {
-        sohElement.textContent = "Available SOH: N/A";
+      function createSohItem(label, value, parentElement) {
+        const infoElement = document.createElement("p");
+        infoElement.innerHTML = `<span style="color: #666;">${label}:</span><span style="color: #000; margin-left: auto;">${value}</span>`;
+        infoElement.style.margin = "0px";
+        infoElement.style.padding = "0px 0";
+        infoElement.style.display = "flex"; // Make it a flex container
+        infoElement.style.justifyContent = "space-between"; // Push content to opposite ends
+        parentElement.appendChild(infoElement);
+        return infoElement;
       }
+
+      createSohItem("Available SOH", inventoryData.SaleableSoh, stockDivInput);
+      createSohItem("Total SOH", inventoryData.TotalSoh, stockDivInput);
+
+      createSohItem("Repack", inventoryData.RepackQuantity, stockDivInput);
+      createSohItem("Display", inventoryData.DisplayQuantity, stockDivInput);
+
+      createSohItem("Purchase Order", inventoryData.OnPurchaseOrderQuantity, stockDivInput);
+      createSohItem("Transfer In", inventoryData.PendingTransferInQuantity, stockDivInput);
+      
+      return inventoryData; // Return the data
+
     })
     .catch(error => {
-      console.error('Error loading inventory data:', error);
-      sohElement.textContent = "Available SOH: Error loading data";
+      console.error('Failed to fetch inventory:', error);
+      stockDivInput.innerHTML = "An error occured.";
+      return null; // Return null on error
     });
 }
 
-  
 
 
-  // Create a product app button
-  const viewButton = document.createElement("button");
-  viewButton.textContent = "Open in Product App";
-  viewButton.style.marginTop = "10px";
-  viewButton.style.padding = "13px";
-  viewButton.style.cursor = "pointer";
-  viewButton.style.width = "100%";
-  viewButton.style.fontWeight = "bold";
-  const currentSku = skuElement.textContent.split(':')[1].trim();
-  viewButton.href = "https://products.jbhifi.tech/product/" + currentSku;
 
-  firstChildDiv.appendChild(viewButton);
 
-  viewButton.addEventListener('click', function() {
-    console.log("View button clicked!");
-    window.open(viewButton.href, "_blank");
-  });
 
-  // Create a blank div line for spacing
-  const blankDiv = document.createElement("div");
-  blankDiv.style.height = "10px"; // Adjust height as needed
-  firstChildDiv.appendChild(blankDiv);
 
-  
-  // Insert as the first child
-  pdpRight.insertBefore(firstChildDiv, pdpRight.firstChild);
 
-  
-}
+
+
+
 
 
 
@@ -695,31 +552,3 @@ script.onload = () => script.remove();
 
 
 
-// Following is code for the API calls that are being tested for inventory :)
-
-// Make getInventoryData return a Promise
-function getInventoryData(apiSku, apiLocationId) {
-  return fetch('http://localhost:3000/0')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`getInventoryData: HTTP error! Status: ${response.status}`);
-      }
-      return response.json(); 
-    })
-    .then(data => {
-      const inventoryData = data[0];
-      console.log('getInventoryData: Inventory data loaded:', inventoryData);
-
-      // examples for testing
-      console.log("SKU:", inventoryData.Sku);
-      console.log("Saleable Stock on Hand:", inventoryData.SaleableSoh);
-      console.log("Location ID:", inventoryData.LocationId);
-      console.log("Exhaustion Date:", inventoryData.ExhaustionDate);
-      
-      return inventoryData; // Return the data
-    })
-    .catch(error => {
-      console.error('Failed to fetch inventory:', error);
-      return null; // Return null on error
-    });
-}
