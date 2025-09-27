@@ -106,7 +106,7 @@ chrome.storage.local.get(["websiteExtraToggle"], (result) => {
     if (result.websiteExtraToggle === undefined) {
         // If the value does not exist, set it to false
         chrome.storage.local.set({ websiteExtraToggle: false });
-        websiteExtraToggleCheckbox.checked = true;
+        websiteExtraToggleCheckbox.checked = false;
     }
     else {
         websiteExtraToggleCheckbox.checked = !!result.websiteExtraToggle;
