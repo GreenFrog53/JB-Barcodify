@@ -1,6 +1,9 @@
-// Okay this code DESPERATELY needs a rewrite, because I honestly have noidea how it works and its a huge pain to maintain.
-// Goodluck to anyone that actually wants to do anything :/
-// lmao, its only going to be me :(
+// Okay so I did a rewrite, is it okay? yea ig, its not great tho
+// but at least *I* can understand the code, which as I'm the only maintainer, is good
+// But yea, enjoy new features, internal info got a redesign, settings don't depend on each other anymore (yay!)
+// Honestly idk what else I did, Ive spend like 10 hours working on this, and my memory is terrible
+
+
 
 // Global Variables
 let pageSku; // Contains the current SKU
@@ -22,7 +25,7 @@ let showProductAppButton = false; // Soon to be used
 let showIntInfo = false; // False by default until settings are checked
 
 let showSohData = false; // Testing at this stage, should be false at start
-let inventoryDataLocation = 43; // Testing at this stage
+let inventoryDataLocation = null; // Testing at this stage
 
 // Temporary Flag Selectors
 let pageHasBeenRefreshed = false; // Will be set to true when a refresh is triggered
@@ -36,10 +39,10 @@ function loadSettings() {
   return Promise.all([
     // Show Internal Information
     new Promise((resolve) => {
-      chrome.storage.local.get(["websiteExtraToggle"], (result) => { 
-        if (result.websiteExtraToggle === true){
+      chrome.storage.local.get(["websiteExtra"], (result) => { 
+        if (result.websiteExtra === true){
           showIntInfo = true; // Update settings variable
-          console.log("JB Barcodify Settings: The Internal Info Section will be displayed as the websiteExtraToggle is true.");
+          console.log("JB Barcodify Settings: The Internal Info Section will be displayed as websiteExtra is true.");
         }
         resolve();
       });
@@ -47,30 +50,59 @@ function loadSettings() {
 
     // Show Soh Data
     new Promise((resolve) => {
-      chrome.storage.local.get(["websiteSohToggle"], (result) => { 
-        if (result.websiteSohToggle === true){
+      chrome.storage.local.get(["websiteStock"], (result) => { 
+        if (result.websiteStock === true){
           showSohData = true; // Update settings variable
-          console.log("JB Barcodify Settings: The Soh data Section will be displayed as the websiteSohToggle is true.");
+          console.log("JB Barcodify Settings: The Soh data Section will be displayed as the websiteStock is true.");
         }
         resolve();
       });
     }),
 
-    // Show Barcodes and Product App Button
+    // Show Soh store code
+new Promise((resolve) => {
+  chrome.storage.local.get(["websiteLocation"], (result) => { 
+    if (result.websiteLocation !== undefined && 
+        !isNaN(result.websiteLocation) && 
+        Number(result.websiteLocation) > 0) {
+      inventoryDataLocation = Number(result.websiteLocation);
+      console.log("JB Barcodify Settings: The Soh location will be " + result.websiteLocation);
+    }
+    resolve();
+  });
+}),
+
+    // Show Barcodes
     new Promise((resolve) => {
-      chrome.storage.local.get(["websiteToggle"], (result) => { 
-        if (result.websiteToggle === undefined) {
-          console.log("JB Barcodify Settings: The barcode will be displayed, as the websiteToggle setting has not been set.");
+      chrome.storage.local.get(["websiteBarcodes"], (result) => { 
+        if (result.websiteBarcodes === undefined) {
+          console.log("JB Barcodify Settings: The barcode will be displayed, as the websiteBarcodes setting has not been set.");
           showBarcode = true;
+        }
+        else if (result.websiteBarcodes === true){
+          console.log("JB Barcodify Settings: The barcode will be displayed, as the websiteBarcodes setting is true.");
+            showBarcode = true;
+        }
+        else {
+          console.log("JB Barcodify Settings: The barcode will not be displayed, as the websiteBarcodes setting is false.");
+        }
+        resolve();
+      });
+    }),
+
+    // Show Product App Button
+    new Promise((resolve) => {
+      chrome.storage.local.get(["websiteButton"], (result) => { 
+        if (result.websiteButton === undefined) {
+          console.log("JB Barcodify Settings: The button will be displayed, as the websiteButton setting has not been set.");
           showProductAppButton = true;
         }
-        else if (result.websiteToggle === true){
-          console.log("JB Barcodify Settings: The barcode will be displayed, as the websiteToggle setting is true.");
-            showBarcode = true;
+        else if (result.websiteButton === true){
+          console.log("JB Barcodify Settings: The button will be displayed, as the websiteButton setting is true.");
             showProductAppButton = true;
         }
         else {
-          console.log("JB Barcodify Settings: The barcode will not be displayed, as the websiteToggle setting is false.");
+          console.log("JB Barcodify Settings: The barcode will not be displayed, as the websiteButton setting is false.");
         }
         resolve();
       });
@@ -253,14 +285,12 @@ function createInfoElement() {
       window.open(viewButton.href, "_blank");
     });
 
-    // Create a blank div line for spacing
+  }
+
+  // Create a blank div line for spacing
     const blankDiv = document.createElement("div");
     blankDiv.style.height = "10px";
     infoElement.appendChild(blankDiv);
-
-    console.log("Button Created with SKU: "+ pageSku);
-
-  }
 
   // Add to the page :)
   pdpRight.insertBefore(infoElement, pdpRight.firstChild);

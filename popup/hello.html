@@ -11,7 +11,7 @@
         
         <!-- Heading -->
         <div class="container">
-            <h1>JB Barcodify</h1>
+            <h1>JB Barcodify <span style="font-size: 0.5em; color: #666; font-weight: normal;">v</span></h1>
         </div>
 
         <!-- Navigation Tab Bar -->
@@ -51,24 +51,35 @@
                 <div class="settings_container">
                     <label>
                         <h3>Website</h3>
-                        <input type="checkbox" id="website-toggle">
-                        Barcodes and Product App Button
+                        <input type="checkbox" id="website-barcodes">
+                        Show Barcodes
                     </label>
                     <br>
                     <label>
-                        <input type="checkbox" id="website-extra-toggle">
-                        Internal Info Section
+                        <input type="checkbox" id="website-button">
+                        Show Product App Button
                     </label>
                     <br>
+                    <label>
+                        <input type="checkbox" id="website-extra">
+                        Show Internal Info Section
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" id="website-stock" disabled>
+                        Show Live Stock Levels (coming soon)
+                        <input type="text" id="website-location" disabled placeholder="Store #" style="margin-left: 4px; text-align: center; width: 60px;">
+                    </label>
+                    
                     <label>
                         <h3>Product App</h3>
-                        <input type="checkbox" id="product-search">
-                        Barcodes in search (experimental)
+                        <input type="checkbox" id="product-listing">
+                        Barcodes on product listings
                     </label>
                     <br>
                     <label>
-                        <input type="checkbox" id="product-listing">
-                        Barcodes on product listings
+                        <input type="checkbox" id="product-search">
+                        Barcodes in search (experimental)
                     </label>
 
                 </div>
@@ -86,9 +97,10 @@
                     <p>New Internal Info section on the website (can be toggled in settings) ⚙️</p>
                     <p>Moved Product App button location to interfere less 🛠️</p>
                     <p>Revamped extension pop up with shortcuts section 🚀</p>
+                    <p>A long overdue code rewrite 🩹</p>
                     <h1>Coming Soon</h1>
                     <p>SOH levels on the website (maybe) 🎉</p>
-                    <p>A long overdue code rewrite 🩹</p>
+                    
                 </div>
             </div>
 

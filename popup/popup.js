@@ -1,3 +1,18 @@
+// Get version from manifest for the little heading :)
+function updateVersionDisplay() {
+    const manifest = chrome.runtime.getManifest();
+    const version = manifest.version;
+    
+    const versionSpan = document.querySelector('h1 span');
+    if (versionSpan) {
+        versionSpan.textContent = `v${version}`;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', updateVersionDisplay);
+
+
+
 // Function to manage redirects
 function redirect(site) {
 
@@ -72,9 +87,10 @@ document.addEventListener('keydown', function(event) {
 
     // Following should be removed in future
 
-    else if (event.code === 'Slash' || event.code === '?') { // check if the slash key is pressed
+    else if (event.code === 'Slash' || event.code === '?') { // check if the slash key is pressed for testing purposes
         console.log('Key pressed!');
-
+        websiteStockCheckbox.disabled = false;
+        websiteLocationTextbox.disabled = false;
     }
 
 
@@ -83,33 +99,79 @@ document.addEventListener('keydown', function(event) {
 
 // Checkboxes for settings
 
-const websiteToggleCheckbox = document.getElementById("website-toggle");
-const websiteExtraToggleCheckbox = document.getElementById("website-extra-toggle");
-const productSearchToggle = document.getElementById("product-search");
-const productListingToggle = document.getElementById("product-listing");
+const websiteBarcodesCheckbox = document.getElementById("website-barcodes");
+const websiteButtonCheckbox = document.getElementById("website-button");
+const websiteExtraCheckbox = document.getElementById("website-extra");
+const websiteStockCheckbox = document.getElementById("website-stock");
+const websiteLocationTextbox = document.getElementById("website-location");
 
+const productListingToggle = document.getElementById("product-listing");
+const productSearchToggle = document.getElementById("product-search");
 
 // Load settings from chrome local storage
 
-chrome.storage.local.get(["websiteToggle"], (result) => { 
-    if (result.websiteToggle === undefined) {
+chrome.storage.local.get(["websiteBarcodes"], (result) => { 
+    if (result.websiteBarcodes === undefined) {
         // If the value does not exist, set it to true
-        chrome.storage.local.set({ websiteToggle: true });
-        websiteToggleCheckbox.checked = true;
+        chrome.storage.local.set({ websiteBarcodes: true });
+        websiteBarcodesCheckbox.checked = true;
     }
     else {
-        websiteToggleCheckbox.checked = !!result.websiteToggle;
+        websiteBarcodesCheckbox.checked = !!result.websiteBarcodes;
     }
 });
 
-chrome.storage.local.get(["websiteExtraToggle"], (result) => { 
-    if (result.websiteExtraToggle === undefined) {
-        // If the value does not exist, set it to false
-        chrome.storage.local.set({ websiteExtraToggle: false });
-        websiteExtraToggleCheckbox.checked = false;
+chrome.storage.local.get(["websiteButton"], (result) => { 
+    if (result.websiteButton === undefined) {
+        // If the value does not exist, set it to true
+        chrome.storage.local.set({ websiteButton: true });
+        websiteButtonCheckbox.checked = true;
     }
     else {
-        websiteExtraToggleCheckbox.checked = !!result.websiteExtraToggle;
+        websiteButtonCheckbox.checked = !!result.websiteButton;
+    }
+});
+
+chrome.storage.local.get(["websiteExtra"], (result) => { 
+    if (result.websiteExtra === undefined) {
+        // If the value does not exist, set it to false
+        chrome.storage.local.set({ websiteExtra: false });
+        websiteExtraCheckbox.checked = false;
+    }
+    else {
+        websiteExtraCheckbox.checked = !!result.websiteExtra;
+    }
+});
+
+chrome.storage.local.get(["websiteStock"], (result) => { 
+    if (result.websiteStock === undefined) {
+        // If the value does not exist, set it to false
+        chrome.storage.local.set({ websiteStock: false });
+        websiteStockCheckbox.checked = false;
+    }
+    else {
+        websiteStockCheckbox.checked = !!result.websiteStock;
+    }
+});
+
+chrome.storage.local.get(["websiteLocation"], (result) => { 
+    if (result.websiteLocation === undefined) {
+        // Do nothing :)
+    }
+    else {
+        websiteLocationTextbox.value = result.websiteLocation;
+    }
+});
+
+
+chrome.storage.local.get(["productListing"], (result) => { 
+    if (result.productListing === undefined) {
+        // If the value does not exist, set it to true
+        chrome.storage.local.set({ productListing: true });
+        productListingToggle.checked = true;
+    }
+    else {
+        productListingToggle.checked = !!result.productListing;
     }
 });
 
@@ -123,37 +185,43 @@ chrome.storage.local.get(["productSearch"], (result) => {
         productSearchToggle.checked = !!result.productSearch;
     }
 });
-
-chrome.storage.local.get(["productListing"], (result) => { 
-    if (result.productListing === undefined) {
-        // If the value does not exist, set it to true
-        chrome.storage.local.set({ productListing: true });
-        productListingToggle.checked = true;
-    }
-    else {
-        productListingToggle.checked = !!result.productListing;
-    }
-});
     
 // Event listeners that listen for changes
 
-websiteToggleCheckbox.addEventListener("change", (event) => {
-  chrome.storage.local.set({ websiteToggle: event.target.checked });
+websiteBarcodesCheckbox.addEventListener("change", (event) => {
+  chrome.storage.local.set({ websiteBarcodes: event.target.checked });
 });
 
-websiteExtraToggleCheckbox.addEventListener("change", (event) => {
-  chrome.storage.local.set({ websiteExtraToggle: event.target.checked });
+websiteButtonCheckbox.addEventListener("change", (event) => {
+  chrome.storage.local.set({ websiteButton: event.target.checked });
 });
 
-productSearchToggle.addEventListener("change", (event) => {
-  chrome.storage.local.set({ productSearch: event.target.checked });
+websiteExtraCheckbox.addEventListener("change", (event) => {
+  chrome.storage.local.set({ websiteExtra: event.target.checked });
 });
+
+websiteStockCheckbox.addEventListener("change", (event) => {
+  chrome.storage.local.set({ websiteStock: event.target.checked });
+});
+
+websiteLocationTextbox.addEventListener("input", (event) => {
+    const value = event.target.value.trim();
+    if (value === "") {
+        chrome.storage.local.remove("websiteLocation");
+    } else {
+        chrome.storage.local.set({ websiteLocation: value });
+    }
+});
+
+
 
 productListingToggle.addEventListener("change", (event) => {
   chrome.storage.local.set({ productListing: event.target.checked });
 });
 
-
+productSearchToggle.addEventListener("change", (event) => {
+  chrome.storage.local.set({ productSearch: event.target.checked });
+});
 
 
 
