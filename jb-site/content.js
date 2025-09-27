@@ -147,6 +147,20 @@ function createInfoElement() {
   infoElement.style.paddingRight = "24px";
   infoElement.style.borderRadius = "5px"; // Add rounded corners (optional)
 
+  // Function for standard stylised text
+  function createInfoItem(label, value, parentElement) {
+    const infoElement = document.createElement("p");
+    infoElement.innerHTML = `<span style="color: #666;">${label}: </span><span style="color: #000;">${value}</span>`;
+    infoElement.style.margin = "0px";
+    parentElement.appendChild(infoElement);
+    return infoElement;
+  }
+
+
+
+
+
+
   if (showIntInfo) {
 
     // Create a heading
@@ -156,6 +170,19 @@ function createInfoElement() {
     headingElement.style.marginBottom = "5px";
     // Append to div
     infoElement.appendChild(headingElement);
+
+    // Disclaimer for refreshes
+    if (pageHasBeenRefreshed) {
+      const disclaimerElement = document.createElement("p");
+      disclaimerElement.textContent = "Warning, internal info is not always acurate once a different varient is selected. Refresh for accurate info."
+      disclaimerElement.style.marginTop = "5px";
+      disclaimerElement.style.marginBottom = "5px";
+      disclaimerElement.style.color = "#666";
+      infoElement.appendChild(disclaimerElement);
+    }
+
+    createInfoItem("Season", getSeasonCode(), infoElement);
+    createInfoItem("Manufacturers Warranty", getWarranty(), infoElement);
 
     // Extra Internal info Stuff goes here
 
@@ -265,6 +292,25 @@ function createBarcodeElement() {
   }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
