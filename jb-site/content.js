@@ -517,6 +517,9 @@ function getInventoryData(apiSku, apiLocationId, stockDivInput) {
 
         createSohItem("Purchase Order", inventoryData.OnPurchaseOrderQuantity, stockDivInput);
         createSohItem("Transfer In", inventoryData.PendingTransferInQuantity, stockDivInput);
+
+        createSohItem("Customer Order", inventoryData.PendingCustomerOrderQuantity, stockDivInput);
+        createSohItem("Receive+", inventoryData.PendingReceiveQuantity, stockDivInput);
         
         resolve(inventoryData);
       } else {
