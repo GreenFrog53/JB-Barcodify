@@ -149,6 +149,11 @@ chrome.storage.local.get(["websiteStock"], (result) => {
         chrome.storage.local.set({ websiteStock: false });
         websiteStockCheckbox.checked = false;
     }
+    else if (result.websiteStock === true){
+        websiteStockCheckbox.checked = !!result.websiteStock;
+        websiteStockCheckbox.disabled = false; // to be removed once testing phase is complete
+        websiteLocationTextbox.disabled = false; // to be removed once testing phase is complete
+    }
     else {
         websiteStockCheckbox.checked = !!result.websiteStock;
     }

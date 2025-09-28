@@ -556,30 +556,6 @@ function getInventoryData(apiSku, apiLocationId, stockDivInput) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Made with love xx
-
-
-
 // add injected script to the page (testing only)
 // Create a script element
 const script = document.createElement('script');
@@ -596,13 +572,4 @@ script.onload = () => script.remove();
 
 
 
-
-
-
-
-
-
-
-
-
-
+// Made with love xx
