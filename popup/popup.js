@@ -107,6 +107,7 @@ const websiteLocationTextbox = document.getElementById("website-location");
 
 const productListingToggle = document.getElementById("product-listing");
 const productSearchToggle = document.getElementById("product-search");
+const productListingHideToggle = document.getElementById("product-listing-hide");
 
 // Load settings from chrome local storage
 
@@ -190,6 +191,17 @@ chrome.storage.local.get(["productSearch"], (result) => {
         productSearchToggle.checked = !!result.productSearch;
     }
 });
+
+chrome.storage.local.get(["productListingHide"], (result) => { 
+    if (result.productListingHide === undefined) {
+        // If the value does not exist, set it to false
+        chrome.storage.local.set({ productListingHide: false });
+        productListingHideToggle.checked = false;
+    }
+    else {
+        productListingHideToggle.checked = !!result.productListingHide;
+    }
+});
     
 // Event listeners that listen for changes
 
@@ -228,6 +240,9 @@ productSearchToggle.addEventListener("change", (event) => {
   chrome.storage.local.set({ productSearch: event.target.checked });
 });
 
+productListingHideToggle.addEventListener("change", (event) => {
+  chrome.storage.local.set({ productListingHide: event.target.checked });
+});
 
 
 

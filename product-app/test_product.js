@@ -5,9 +5,9 @@ const intervalId = setInterval(() => {
 
     
 
-    chrome.storage.local.get(["productSearch", "productListing"], (result) => {
-        if (result.productSearch === false && result.productListing === false) {
-            console.log("JB Barcodify: Both productSearch and productListing are false.");
+    chrome.storage.local.get(["productSearch", "productListing", "productListingHide"], (result) => {
+        if (result.productSearch === false && result.productListing === false && result.productListingHide === false) {
+            console.log("JB Barcodify: Both productSearch, productListing and productListingHide are false.");
             clearInterval(intervalId); // Stop the interval as there is no point looking for anything, as the settings are false
         }
         else {
