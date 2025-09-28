@@ -228,8 +228,14 @@ function createInfoElement() {
 
     // Create a heading
     const headingElement = document.createElement("h6");
+
+
+    const stockHeadingName = "Stock Levels";
+
+
+
     if (inventoryDataLocation === null) {
-      headingElement.textContent = "Stock Levels";
+      headingElement.textContent = stockHeadingName;
       headingElement.style.marginTop = "5px";
       headingElement.style.marginBottom = "5px";
       // Append to div
@@ -242,8 +248,23 @@ function createInfoElement() {
       infoElement.appendChild(disclaimerElement);
 
     }
+    else if (inventoryDataLocation > 500) {
+
+      headingElement.textContent = stockHeadingName;
+      headingElement.style.marginTop = "5px";
+      headingElement.style.marginBottom = "5px";
+      // Append to div
+      infoElement.appendChild(headingElement);
+
+      const disclaimerElement = document.createElement("p");
+      disclaimerElement.textContent = "Try a lower store code. " + inventoryDataLocation + " is too high!";
+      disclaimerElement.style.margin = "0px";
+      disclaimerElement.style.color = "#666";
+      infoElement.appendChild(disclaimerElement);
+
+    }
     else {
-      headingElement.textContent = "Live Stock ("+ inventoryDataLocation + ")";
+      headingElement.textContent = stockHeadingName + " ("+ inventoryDataLocation + ")";
       headingElement.style.marginTop = "5px";
       headingElement.style.marginBottom = "5px";
       infoElement.appendChild(headingElement);
@@ -515,11 +536,13 @@ function getInventoryData(apiSku, apiLocationId, stockDivInput) {
         createSohItem("Repack", inventoryData.RepackQuantity, stockDivInput);
         createSohItem("Display", inventoryData.DisplayQuantity, stockDivInput);
 
+        createSohItem("Customer Order", inventoryData.PendingCustomerOrderQuantity, stockDivInput);
+        createSohItem("Receive+", inventoryData.PendingReceiveQuantity, stockDivInput);
+
         createSohItem("Purchase Order", inventoryData.OnPurchaseOrderQuantity, stockDivInput);
         createSohItem("Transfer In", inventoryData.PendingTransferInQuantity, stockDivInput);
 
-        createSohItem("Customer Order", inventoryData.PendingCustomerOrderQuantity, stockDivInput);
-        createSohItem("Receive+", inventoryData.PendingReceiveQuantity, stockDivInput);
+        
         
         resolve(inventoryData);
       } else {
