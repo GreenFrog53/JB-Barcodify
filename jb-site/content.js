@@ -480,54 +480,52 @@ function getWarranty() {
 
 // Following is code for the API calls that are being tested for inventory :)
 function getInventoryData(apiSku, apiLocationId, stockDivInput) {
-  return fetch(apiUrl + "sku=" + apiSku + "&locationId=" + apiLocationId + "&time=" + Math.floor(Date.now() / 1000))
-    .then(response => {
-      if (!response.ok) {
+  return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage({
+      action: 'getInventoryData',
+      apiSku: apiSku,
+      apiLocationId: apiLocationId
+    }, (response) => {
+      if (response.success) {
+        const inventoryData = response.data;
+        console.log('getInventoryData: Inventory data loaded:', inventoryData);
+
+        stockDivInput.innerHTML = "";
+
+        // Apply grid styling to the container
+        stockDivInput.style.display = "grid";
+        stockDivInput.style.gridTemplateColumns = "1fr 1fr"; // 2 columns
+        stockDivInput.style.gap = "5px 25px"; // Space between items
+        stockDivInput.style.marginTop = "5px";
+
+        function createSohItem(label, value, parentElement) {
+          const infoElement = document.createElement("p");
+          infoElement.innerHTML = `<span style="color: #666;">${label}:</span><span style="color: #000; margin-left: auto;">${value}</span>`;
+          infoElement.style.margin = "0px";
+          infoElement.style.padding = "0px 0";
+          infoElement.style.display = "flex"; // Make it a flex container
+          infoElement.style.justifyContent = "space-between"; // Push content to opposite ends
+          parentElement.appendChild(infoElement);
+          return infoElement;
+        }
+
+        createSohItem("Available SOH", inventoryData.SaleableSoh, stockDivInput);
+        createSohItem("Total SOH", inventoryData.TotalSoh, stockDivInput);
+
+        createSohItem("Repack", inventoryData.RepackQuantity, stockDivInput);
+        createSohItem("Display", inventoryData.DisplayQuantity, stockDivInput);
+
+        createSohItem("Purchase Order", inventoryData.OnPurchaseOrderQuantity, stockDivInput);
+        createSohItem("Transfer In", inventoryData.PendingTransferInQuantity, stockDivInput);
+        
+        resolve(inventoryData);
+      } else {
+        console.error('Failed to fetch inventory:', response.error);
         stockDivInput.innerHTML = "An error occured.";
-        throw new Error(`getInventoryData: HTTP error! Status: ${response.status}`);
+        reject(new Error(response.error));
       }
-      return response.json(); 
-    })
-    .then(data => {
-      const inventoryData = data[0];
-      console.log('getInventoryData: Inventory data loaded:', inventoryData);
-
-      stockDivInput.innerHTML = "";
-
-      // Apply grid styling to the container
-      stockDivInput.style.display = "grid";
-      stockDivInput.style.gridTemplateColumns = "1fr 1fr"; // 2 columns
-      stockDivInput.style.gap = "5px 25px"; // Space between items
-      stockDivInput.style.marginTop = "5px";
-
-      function createSohItem(label, value, parentElement) {
-        const infoElement = document.createElement("p");
-        infoElement.innerHTML = `<span style="color: #666;">${label}:</span><span style="color: #000; margin-left: auto;">${value}</span>`;
-        infoElement.style.margin = "0px";
-        infoElement.style.padding = "0px 0";
-        infoElement.style.display = "flex"; // Make it a flex container
-        infoElement.style.justifyContent = "space-between"; // Push content to opposite ends
-        parentElement.appendChild(infoElement);
-        return infoElement;
-      }
-
-      createSohItem("Available SOH", inventoryData.SaleableSoh, stockDivInput);
-      createSohItem("Total SOH", inventoryData.TotalSoh, stockDivInput);
-
-      createSohItem("Repack", inventoryData.RepackQuantity, stockDivInput);
-      createSohItem("Display", inventoryData.DisplayQuantity, stockDivInput);
-
-      createSohItem("Purchase Order", inventoryData.OnPurchaseOrderQuantity, stockDivInput);
-      createSohItem("Transfer In", inventoryData.PendingTransferInQuantity, stockDivInput);
-      
-      return inventoryData; // Return the data
-
-    })
-    .catch(error => {
-      console.error('Failed to fetch inventory:', error);
-      stockDivInput.innerHTML = "An error occured.";
-      return null; // Return null on error
     });
+  });
 }
 
 
