@@ -216,6 +216,7 @@ function createInfoElement() {
     infoDiv.style.backgroundColor = "#f0f0f0";
     
     createInfoItem("Season", getSeasonCode(), infoDiv);
+    createInfoItem("Supplier", getSupplier(), infoDiv);
     createInfoItem("Manufacturers Warranty", getWarranty(), infoDiv);
 
     infoElement.appendChild(infoDiv);
@@ -493,6 +494,29 @@ function getWarranty() {
   }
   else {
     console.log("Manufacturer's warranty not found. Way to locate it no longer works :(");
+    return "N/A";
+  }
+}
+
+// Function to extract the supplier info from the website
+function getSupplier() {
+  const scripts = Array.from(document.querySelectorAll('script'));
+  const targetScript = scripts.find(script => script.textContent.includes('product.metafields'));
+
+  if (targetScript) {
+    // Use a regular expression to extract the Manufacturer's warranty
+    const match = targetScript.textContent.match(/"SupplierName":"(.*?)"/);
+
+    if (match && match[1]) {
+        console.log("SupplierName:", match[1]); // Logs the supplier
+        return match[1];
+    } else {
+        console.log("Supplier Name not found.");
+        return "N/A";
+    }
+  }
+  else {
+    console.log("Suppliers name not found. Way to locate it no longer works :(");
     return "N/A";
   }
 }

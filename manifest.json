@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "JB Barcodify",
   "description": "JB Website Barcode Generator",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "action": {
     "default_popup": "popup/hello.html",
     "default_icon": {
