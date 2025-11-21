@@ -571,7 +571,7 @@ function getInventoryData(apiSku, apiLocationId, stockDivInput) {
         resolve(inventoryData);
       } else {
         console.error('Failed to fetch inventory:', response.error);
-        stockDivInput.innerHTML = "An error occured.";
+        stockDivInput.innerHTML = "An error occured, try the following:<br> - Ensure you've entered a valid store code<br> - Ensure you're on the store network<br><br>The server that is pinged might be also down :/";
         reject(new Error(response.error));
       }
     });

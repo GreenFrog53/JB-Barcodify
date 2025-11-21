@@ -16,6 +16,14 @@ document.addEventListener('DOMContentLoaded', updateVersionDisplay);
 // Function to manage redirects
 function redirect(site) {
 
+    // First check if the shortcuts tab is visible, otherwise do nothing
+
+    const activePanel = document.querySelector('.tab-panel.active');
+    if (activePanel && activePanel.id !== 'shortcuts') {
+        return;
+    }
+
+
     if (site == "switch-user") {
         chrome.tabs.create({ url: 'https://m365.cloud.microsoft/login?es=Click&ru=%2Fapps%3Fhome%3D1%26acctsw%3D1&prompt=select_account' }); // redirect to sign in :)
     }
@@ -45,6 +53,12 @@ function redirect(site) {
     }
     else if (site == "t2w") {
         chrome.tabs.create({ url: 'https://jbhifi.time2work.com/' }); // redirect to time2work :)
+    }
+    else if (site == "jb-pos") {
+        chrome.tabs.create({ url: 'https://launcher.myapps.microsoft.com/api/signin/98ae2162-0857-421f-8312-3e851f20d82c' }); // redirect to time2work :)
+    }
+    else if (site == "studio") {
+        chrome.tabs.create({ url: 'https://launcher.myapps.microsoft.com/api/signin/ecd32ff9-cc56-4c3c-8c82-cfe85c1920ce' }); // redirect to time2work :)
     }
     // Hopefully these don't need to much updating :)
 
@@ -81,8 +95,14 @@ document.addEventListener('keydown', function(event) {
     else if (event.code === 'KeyB') { // Check if the B key is pressed
         redirect("backstage");
     }
-    else if (event.code === 'KeyT') { // Check if the t key is pressed
+    else if (event.code === 'Digit2') { // Check if the 2 key is pressed
         redirect("t2w");
+    }
+    else if (event.code === 'KeyT') { // Check if the t key is pressed
+        redirect("studio");
+    }
+    else if (event.code === 'KeyJ') { // Check if the j key is pressed
+        redirect("jb-pos");
     }
 
     // Following should be removed in future
