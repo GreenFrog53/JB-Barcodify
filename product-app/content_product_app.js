@@ -99,7 +99,7 @@ function entry() {
 
 function grabPluElement() {
     // Select the PLU element and ensure it contains "PLU:"
-    const elements = document.querySelectorAll('.MuiGrid-root.MuiGrid-item.MuiGrid-grid-sm-12.css-h719to');
+    const elements = document.querySelectorAll('.css-1ksw8rd');
     let pluElement = null;
     elements.forEach(element => {
         if (element.textContent.includes('PLU:')) {
@@ -142,7 +142,7 @@ function createBarcode(pluElement, currentPlu) {
 
 function hidePriceElements() {
     // Find all price elements
-    const priceElements = document.querySelectorAll('.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-6.MuiGrid-grid-md-4.MuiGrid-grid-lg-6.css-h3531k');
+    const priceElements = document.querySelectorAll('.css-7bll3g');
     
     priceElements.forEach(element => {
         // Check if it contains a price (starts with $)
